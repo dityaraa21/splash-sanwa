@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Splash Screen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
       margin: 0;
@@ -30,12 +33,13 @@
     }
 
     .headline {
-      font-family: 'Georgia', 'Times New Roman', serif;
-      font-size: clamp(12px, 1.3vw, 18px);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: clamp(16px, 1.8vw, 28px);
+      font-weight: 800;
       color: #ffffff;
       text-align: left;
-      letter-spacing: 0.18em;
-      line-height: 2.3;
+      letter-spacing: 0.12em;
+      line-height: 2;
       text-transform: uppercase;
     }
 
@@ -56,7 +60,7 @@
       position: absolute;
       top: 0;
       left: 0;
-      width: 35px;
+      width: 45px;
       height: 240px;
       background: #ffffff;
     }
@@ -81,7 +85,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script>
-  const barWidth = 35;
+  const barWidth = 45;
   const gap     = 15;
 
   // Centering awal: geser wrapper ke tengah viewport
@@ -92,18 +96,18 @@
   gsap.set(".line",         { opacity: 0, x: -28 });
   gsap.set(".bars-wrapper", { x: offsetX });
 
-  const tl = gsap.timeline();
+  const tl = gsap.timeline({ delay: 0.8 });
 
-  // Step 1 — satu bar tipis muncul (3 bar tumpuk = 1 bar)
+  // Step 1 — bar muncul pelan (scaleY panjang)
   tl.to(".bar", {
     scaleY: 1,
-    duration: 0.4,
-    ease: "expo.out",
+    duration: 0.6,
+    ease: "power3.out",
   })
 
-  // Step 2 — split: bar1 & bar3 geser keluar, bar2 diam
-  .to("#bar1", { x: -(barWidth + gap), duration: 0.85, ease: "power3.inOut" }, "split")
-  .to("#bar3", { x:  (barWidth + gap), duration: 0.85, ease: "power3.inOut" }, "split")
+  // Step 2 — split cepat
+  .to("#bar1", { x: -(barWidth + gap), duration: 0.35, ease: "power4.out" }, "split")
+  .to("#bar3", { x:  (barWidth + gap), duration: 0.35, ease: "power4.out" }, "split")
 
   // Step 3 — semua geser ke kanan
   .to(".bars-wrapper", {
