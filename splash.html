@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Splash Screen</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #FC3945;
+    }
+
+    /* Horizontal layout: text left | bars right */
+    .splash {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 88px;
+    }
+
+    .headline {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: clamp(12px, 1.3vw, 18px);
+      color: #ffffff;
+      text-align: left;
+      letter-spacing: 0.18em;
+      line-height: 2.3;
+      text-transform: uppercase;
+    }
+
+    .line {
+      display: block;
+      font-size: 1.5rem;
+    }
+
+    /* 3 bars stacked on top of each other = visually 1 bar */
+    .bars-wrapper {
+      position: relative;
+      width: 20px;
+      height: 240px;
+      flex-shrink: 0;
+    }
+
+    .bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 35px;
+      height: 240px;
+      background: #ffffff;
+    }
+  </style>
+</head>
+<body>
+
+  <main class="splash">
+
+    <p class="headline">
+      <span class="line">Everything is for 'Leading Edge' of tomorrow</span>
+    </p>
+
+    <!-- Logo -->
+    <div class="bars-wrapper">
+      <div class="bar" id="bar1"></div>
+      <div class="bar" id="bar2"></div>
+      <div class="bar" id="bar3"></div>
+    </div>
+
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+  const barWidth = 35;
+  const gap     = 15;
+
+  // Centering awal: geser wrapper ke tengah viewport
+  const rect    = document.querySelector('.bars-wrapper').getBoundingClientRect();
+  const offsetX = window.innerWidth / 2 - (rect.left + rect.width / 2);
+
+  gsap.set(".bar",          { scaleY: 0, transformOrigin: "center center" });
+  gsap.set(".line",         { opacity: 0, x: -28 });
+  gsap.set(".bars-wrapper", { x: offsetX });
+
+  const tl = gsap.timeline();
+
+  // Step 1 — satu bar tipis muncul (3 bar tumpuk = 1 bar)
+  tl.to(".bar", {
+    scaleY: 1,
+    duration: 0.4,
+    ease: "expo.out",
+  })
+
+  // Step 2 — split: bar1 & bar3 geser keluar, bar2 diam
+  .to("#bar1", { x: -(barWidth + gap), duration: 0.85, ease: "power3.inOut" }, "split")
+  .to("#bar3", { x:  (barWidth + gap), duration: 0.85, ease: "power3.inOut" }, "split")
+
+  // Step 3 — semua geser ke kanan
+  .to(".bars-wrapper", {
+    x: 0,
+    duration: 0.75,
+    ease: "power3.out",
+  })
+
+  // Step 4 — text muncul dari kiri
+  .to(".line", {
+    opacity: 1,
+    x: 0,
+    duration: 0.72,
+    ease: "power3.out",
+  }, "-=0.35");
+</script>
+
+</body>
+</html>
